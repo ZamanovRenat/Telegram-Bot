@@ -73,7 +73,7 @@ namespace RinMeteoBot
 
             switch (CityName)
             {
-                case "/Kazan":
+                case "Казань":
                     {
                         url = @"http://www.eurometeo.ru/russia/tatarstan/kazan/export/xml/data/";
                         break;
@@ -124,7 +124,7 @@ namespace RinMeteoBot
                     $"Погода: {item.Element("datetime").Value.Replace("04:00:00", "Утром").Replace("10:00:00", "Днем").Replace("16:00:00", "Вечером").Replace("22:00:00", "Ночью")} \n" +
                     $"Атмосферное давление в мм рт.столба: {item.Element("pressure").Value} \n" +
                     $"Температура воздуха в °C: {item.Element("temperature").Value} \n" +
-                    $"Относительная влажность: {item.Element("humidity").Value} \n" +
+                    $"Относительная влажность в %: {item.Element("humidity").Value} \n" +
                     $"Облачность в %: {item.Element("cloudcover").Value} \n" +
                     $"Скорость ветра в м/с: {item.Element("windspeed").Value} \n" +
                     $"Скорость порывов ветра в м/с: {item.Element("windgust").Value} \n" +
