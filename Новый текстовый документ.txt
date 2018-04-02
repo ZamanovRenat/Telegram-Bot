@@ -1,0 +1,15 @@
+https://telegram.me/botfather
+name: Senselkjfgth bot
+
+BotFather, [01.04.18 13:31]
+Good. Now let's choose a username for your bot. It must end in `bot`. Like this, for example: TetrisBot or tetris_bot.
+
+BotFather, [01.04.18 13:34]
+Done! Congratulations on your new bot. You will find it at t.me/Sense2018_bot. You can now add a description, about section and profile picture for your bot, see /help for a list of commands. By the way, when you've finished creating your cool bot, ping our Bot Support if you want a better username for it. Just make sure the bot is fully operational before you do this.
+
+Use this token to access the HTTP API:
+567814501:AAEY9KsEhDYTme3nmEDZKbWTgEOEveV5Ydc
+
+For a description of the Bot API, see this page: https://core.telegram.org/bots/api
+
+{"ok":true,"result":{"id":567814501,"is_bot":true,"first_name":"Senselkjfgth bot","username":"Sense2018_bot"}}
