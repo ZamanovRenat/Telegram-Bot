@@ -46,6 +46,7 @@ namespace RinMeteoBot
 
                         Console.WriteLine($"{firstName} {messagFronId} {messageText}");
 
+                        //messageText = "Вы прислали " + messageText;
                         messageText = GetWeather(messageText);
 
                         //messageText += "\n\n http://t.me/teamgeek";
@@ -75,32 +76,32 @@ namespace RinMeteoBot
             {
                 case "Казань":
                     {
-                        url = @"http://www.eurometeo.ru/russia/tatarstan/kazan/export/xml/data/";
+                        url = @"https://xml.meteoservice.ru/export/gismeteo/point/486.xml";
                         break;
                     }
                 case "Москва":
                     {
-                        url = @"http://www.eurometeo.ru/russia/moskva/export/xml/data/";
+                        url = @"https://xml.meteoservice.ru/export/gismeteo/point/37.xml";
                         break;
                     }
                 case "Уфа":
                     {
-                        url = @"http://www.eurometeo.ru/russia/bashkortostan/ufa/export/xml/data/";
+                        url = @"https://xml.meteoservice.ru/export/gismeteo/point/140.xml";
                         break;
                     }
                 case "Красноярск":
                     {
-                        url = @"http://www.eurometeo.ru/russia/krasnoyarskiy-kray/krasnoyarsk/export/xml/data/";
+                        url = @"https://xml.meteoservice.ru/export/gismeteo/point/146.xml";
                         break;
                     }
                 case "Набережные челны":
                     {
-                        url = @"http://www.eurometeo.ru/russia/tatarstan/naberezhnyie-chelnyi/export/xml/data/";
+                        url = @"https://xml.meteoservice.ru/export/gismeteo/point/12.xml";
                         break;
                     }
                 case "Татарстан":
                     {
-                        url = @"http://www.eurometeo.ru/russia/tatarstan/tukaevskiy-rayon/sovhoza-tatarstan/export/xml/data/";
+                        url = @"https://xml.meteoservice.ru/export/gismeteo/point/31608.xml";
                         break;
                     }
                 default:
@@ -112,23 +113,25 @@ namespace RinMeteoBot
             string xmlData = new WebClient().DownloadString(url);
 
             var xmlColItem = XDocument.Parse(xmlData)
-                                      .Descendants("weather")
-                                      .Descendants("city")
-                                      .Descendants("step").ToArray();
+                          .Descendants("MMWEATHER")
+                          .Descendants("REPORT")
+                          .Descendants("TOWN")
+                          .Descendants("FORECAST").ToArray();
 
             string text = string.Empty;
 
             foreach (var item in xmlColItem)
             {
                 text +=
-                    $"Погода: {item.Element("datetime").Value.Replace("04:00:00", "Утром").Replace("10:00:00", "Днем").Replace("16:00:00", "Вечером").Replace("22:00:00", "Ночью")} \n" +
-                    $"Атмосферное давление в мм рт.столба: {item.Element("pressure").Value} \n" +
-                    $"Температура воздуха в °C: {item.Element("temperature").Value} \n" +
-                    $"Относительная влажность в %: {item.Element("humidity").Value} \n" +
-                    $"Облачность в %: {item.Element("cloudcover").Value} \n" +
-                    $"Скорость ветра в м/с: {item.Element("windspeed").Value} \n" +
-                    $"Скорость порывов ветра в м/с: {item.Element("windgust").Value} \n" +
-                    $"Осадки в мм за 3 часа: {item.Element("precipitation").Value} \n\n";
+                    $"Погода {item.Attribute("weekday").Value.Replace("2", "в понедельник").Replace("3", "во вторник").Replace("4", "в среду").Replace("5", "в четверг").Replace("6", "в пятницу").Replace("7", "в субботу").Replace("1", "в воскресенье")}" +
+                    $" {item.Attribute("tod").Value.Replace("0", "ночью").Replace("1", "утром").Replace("2", "днем").Replace("3", "вечером")}" +
+                    $" {item.Element("PHENOMENA").Attribute("precipitation").Value.Replace("4", "дождь").Replace("5", "ливень").Replace("6", "снег").Replace("7", "снег").Replace("8", "гроза").Replace("10", "без осадков")}." +
+                    $" Атмосферное давление: от {item.Element("PRESSURE").Attribute("min").Value} до {item.Element("PRESSURE").Attribute("max").Value} мм.рт.ст." +
+                    $" Температура воздуха от {item.Element("TEMPERATURE").Attribute("min").Value} до {item.Element("TEMPERATURE").Attribute("max").Value} °C." +
+                    $" Ветер {item.Element("WIND").Attribute("direction").Value.Replace("0", "северный").Replace("0", "северный").Replace("1", "северо-восточный").Replace("2", "восточный").Replace("3", "юго-восточный").Replace("4", "южный").Replace("5", "юго-западный").Replace("6", "западный").Replace("7", "северо-западный")}" +
+                    $" со скоростью от {item.Element("WIND").Attribute("min").Value} до {item.Element("WIND").Attribute("max").Value} м/с." +
+                    $" Относительная влажность воздуха от {item.Element("RELWET").Attribute("min").Value} до {item.Element("RELWET").Attribute("max").Value} %" +
+                    $"\n \n";
             }
             return (text);
 
